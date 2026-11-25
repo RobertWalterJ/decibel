@@ -161,6 +161,35 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .chipgrp{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--surface);overflow:hidden;max-width:100%}
 .chipgrp .chip{border:0;border-radius:0;background:none;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .chipgrp .chip.x{width:44px;padding:0;color:var(--muted);font-size:1.2rem;border-left:1px solid var(--line)}
+.chead-r{display:flex;align-items:center;gap:10px}
+.btn.sm{min-height:44px;padding:6px 12px;font-size:.85rem}
+.btn.armed{color:var(--stop);border-color:var(--stop)}
+.sound{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--sunk);display:flex;flex-direction:column;gap:2px;min-width:0}
+.sound .sl{font-size:.9rem;font-weight:700;overflow-wrap:anywhere}
+.sound .sl .mono{font-weight:500}
+.sound .sc{font-size:.85rem;color:var(--muted);font-weight:600}
+.sound .sc b{color:var(--ink);font-weight:800}
+.nrow{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.nbadge{min-width:88px;min-height:56px;padding:4px 12px;border-radius:14px;border:1px solid var(--line);background:var(--sunk);color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;flex:none}
+.nbadge .nn{font-weight:800;font-size:1.5rem;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.nbadge .ne{font-size:.72rem;color:var(--muted);font-weight:600}
+.nbadge.go{background:color-mix(in srgb,var(--go) 18%,var(--surface));border-color:var(--go)}
+.nbadge.go .nn{color:var(--go)}
+.nbadge.caution{background:color-mix(in srgb,var(--caution) 18%,var(--surface));border-color:var(--caution)}
+.nbadge.caution .nn{color:var(--caution)}
+.nbadge.none .nn{color:var(--muted)}
+.nstat{flex:1 1 120px;min-width:0;display:flex;flex-direction:column;gap:2px}
+.nstat .nl{font-weight:700;font-size:.92rem}
+.nstat .nl.go{color:var(--go)} .nstat .nl.caution{color:var(--caution)} .nstat .nl.none{color:var(--muted)}
+.nstat .ns{font-size:.8rem;color:var(--muted)}
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:560px;background:var(--surface);border:1px solid var(--line);border-radius:18px 18px 0 0;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.sheet .sh{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px}
+.pgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.pgrid .btn{padding:0;font-size:1.05rem}
+.pgrid .btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.pgrid .btn:disabled{opacity:.4;cursor:default}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);z-index:50;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:700;font-size:.9rem;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
 @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
@@ -243,7 +272,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
     </section>
 
     <section class="card gcard" aria-label="Tone layers">
-      <div class="cardhead"><div class="eyebrow">Tone layers</div><span class="mono note" id="gcount"></span></div>
+      <div class="cardhead"><div class="eyebrow">Tone layers</div><div class="chead-r"><span class="mono note" id="gcount"></span>
+        <button id="grst" class="btn sm" type="button">Reset</button></div></div>
+      <div class="sound" id="gsound" role="status" aria-live="polite"></div>
       <div class="layers" id="glist"></div>
       <button id="gadd" class="btn full" type="button">Add tone</button>
     </section>
@@ -259,6 +290,16 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
     <p class="note">Start quiet. High frequencies and square or saw waves can sound much louder than they read.</p>
   </div>
 </main>
+<div class="scrim" id="pick" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pickt">
+    <div class="sh"><div class="eyebrow" id="pickt">Pick a note</div><button type="button" class="iconbtn flat" id="pickx" aria-label="Close note picker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="row"><span class="lab" id="pocl">Octave</span>
+      <div class="stepper" role="group" aria-labelledby="pocl"><button type="button" class="btn" id="pocm" aria-label="Lower octave">&minus;</button><output id="poct" aria-live="polite">4</output><button type="button" class="btn" id="pocp" aria-label="Higher octave">+</button></div></div>
+    <div class="pgrid" id="pgrid" role="group" aria-label="Notes"></div>
+    <p class="note mono" id="pinfo"></p>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
 
 <nav class="tabbar" aria-label="Sections">
   <div class="tabs">
@@ -526,10 +567,31 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   const ICON_SPK = '<svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
   const ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  const NN = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-  function noteOf(f) {
-    const n = 69 + 12 * Math.log2(f / 440), r = Math.round(n), c = Math.round((n - r) * 100);
-    return NN[((r % 12) + 12) % 12] + (Math.floor(r / 12) - 1) + ' ' + (c >= 0 ? '+' : '-') + Math.abs(c) + ' c';
+  const NS = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
+  const NF = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
+  const midiHz = m => 440 * Math.pow(2, (m - 69) / 12);
+  const NOTE_LO = 16.35, NOTE_HI = 7902.13;
+  function noteInfo(f) {
+    const x = 69 + 12 * Math.log2(f / 440), m = Math.round(x), pc = ((m % 12) + 12) % 12, oct = Math.floor(m / 12) - 1;
+    const inRange = f >= NOTE_LO && f <= NOTE_HI, cents = (x - m) * 100;
+    return { m, pc, oct, cents, inRange, hz: midiHz(m), name: NS[pc] + oct, alt: NS[pc] !== NF[pc] ? NF[pc] + oct : '' };
+  }
+  const CHORDS = [
+    [[0, 4, 7], 'major'], [[0, 3, 7], 'minor'], [[0, 3, 6], 'diminished'], [[0, 4, 8], 'augmented'],
+    [[0, 2, 7], 'sus2'], [[0, 5, 7], 'sus4'], [[0, 4, 7, 10], 'dominant 7'], [[0, 4, 7, 11], 'major 7'],
+    [[0, 3, 7, 10], 'minor 7'], [[0, 7], 'power chord']
+  ];
+  function chordName(notes) { // notes: noteInfo list, sorted by pitch
+    const pcs = [...new Set(notes.map(n => n.pc))];
+    if (notes.length < 2) return '';
+    if (pcs.length === 1) return NS[pcs[0]] + (new Set(notes.map(n => n.m)).size === 1 ? ' unison' : ' octave');
+    const key = a => a.join(',');
+    for (const r of pcs) { // lowest note tried first as the root
+      const iv = pcs.map(p => (p - r + 12) % 12).sort((x, y) => x - y);
+      const hit = CHORDS.find(c => key(c[0]) === key(iv));
+      if (hit) return NS[r] + ' ' + hit[1];
+    }
+    return '';
   }
   const fmtHz = f => String(+f.toFixed(2));
   const fillRange = el => el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min) * 100) + '%');
@@ -689,10 +751,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   const byId = id => G.layers.find(l => l.id === id);
   const layerHTML = (L, i) => {
     const n = i + 1;
-    return '<div class="layer" data-id="' + L.id + '">' +
-      '<div class="lh"><span class="eyebrow">Tone ' + n + '</span><span class="lnote mono" data-r="note"></span>' +
+    return '<div class="layer" data-id="' + L.id + '" data-n="' + n + '">' +
+      '<div class="lh"><span class="eyebrow">Tone ' + n + '</span><span class="lnote"></span>' +
       '<button type="button" class="iconbtn flat" data-act="mute" aria-pressed="' + L.mute + '" aria-label="Mute tone ' + n + '">' + ICON_SPK + '</button>' +
       '<button type="button" class="iconbtn flat" data-act="remove" aria-label="Remove tone ' + n + '">' + ICON_X + '</button></div>' +
+      '<div class="nrow"><button type="button" class="nbadge" data-act="pick" aria-haspopup="dialog" data-r="badge"><span class="nn" data-r="nn"></span><span class="ne" data-r="ne"></span></button>' +
+      '<div class="nstat"><div class="nl" data-r="nl"></div><div class="ns mono" data-r="ns"></div></div>' +
+      '<button type="button" class="btn sm" data-act="snap" data-r="snap">Snap to note</button></div>' +
       '<div class="seg wave fill" role="group" aria-label="Waveform, tone ' + n + '">' +
       WAVES.map(w => '<button type="button" data-act="wave" data-v="' + w + '" aria-pressed="' + (L.wave === w) + '">' + wfIcon(w) + '<span>' + WAVE_LABEL[w] + '</span></button>').join('') + '</div>' +
       '<input type="range" class="fs" min="0" max="1000" step="1" aria-label="Frequency slider, tone ' + n + '">' +
@@ -705,18 +770,37 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       '<div class="lvl"><label for="l' + L.id + '">Level</label><input id="l' + L.id + '" class="ls" type="range" min="0" max="100" step="1"><output data-r="lv" for="l' + L.id + '"></output></div>' +
       '</div>';
   };
+  const cstr = c => (c >= 0 ? '+' : '-') + Math.abs(Math.round(c));
+  function syncNote(el, L, n) {
+    const i = noteInfo(L.freq), q = r => el.querySelector('[data-r="' + r + '"]');
+    const off = i.inRange && Math.abs(i.cents) > 5, ok = i.inRange && !off, cl = !i.inRange ? 'none' : ok ? 'go' : 'caution';
+    const bd = q('badge'), nl = q('nl'); bd.className = 'nbadge ' + cl; nl.className = 'nl ' + cl;
+    q('nn').textContent = i.inRange ? i.name : '--'; q('ne').textContent = i.inRange && i.alt ? '/ ' + i.alt : '';
+    const c = Math.round(i.cents), ab = Math.abs(c);
+    nl.textContent = !i.inRange ? 'Outside the musical range' : ok ? 'In tune' : cstr(i.cents) + ' cent' + (ab === 1 ? '' : 's') + (c > 0 ? ' sharp' : ' flat');
+    q('ns').textContent = !i.inRange ? '' : ok ? (Math.abs(i.cents) < 0.5 ? i.name + ' = ' + i.hz.toFixed(2) + ' Hz' : cstr(i.cents * 10 / 10) + ' c from ' + i.name) : i.name + ' is ' + i.hz.toFixed(2) + ' Hz';
+    q('snap').hidden = !(i.inRange && Math.abs(i.cents) > 0.5);
+    bd.setAttribute('aria-label', 'Tone ' + n + ' note ' + (i.inRange ? i.name + (i.alt ? ' or ' + i.alt : '') + ', ' + nl.textContent : nl.textContent) + '. Open note picker');
+    q('snap').setAttribute('aria-label', 'Snap tone ' + n + ' to ' + i.name + ', ' + i.hz.toFixed(2) + ' hertz');
+  }
+  function updateSound() {
+    const box = $('gsound'); if (!box) return;
+    const ns = G.layers.filter(l => !l.mute).map(l => noteInfo(l.freq)).filter(i => i.inRange).sort((a, b) => a.m - b.m || a.cents - b.cents);
+    const ch = chordName(ns.filter(i => Math.abs(i.cents) <= 25));
+    box.innerHTML = '<div class="sl">Sounding: <span class="mono">' + (ns.length ? ns.map(i => esc(i.name)).join(' · ') : 'none') + '</span></div>' + (ch ? '<div class="sc"><b>' + esc(ch) + '</b></div>' : '');
+  }
   function syncLayer(el, L, skip) {
     const fs = el.querySelector('.fs'), fn = el.querySelector('.fnum'), ls = el.querySelector('.ls');
     if (skip !== 'fs') { fs.value = fToSlider(L.freq); } fillRange(fs);
     if (skip !== 'fnum') fn.value = fmtHz(L.freq);
-    el.querySelector('[data-r="note"]').textContent = noteOf(L.freq);
+    syncNote(el, L, +el.dataset.n || 1); updateSound();
     ls.value = L.level; fillRange(ls); el.querySelector('[data-r="lv"]').textContent = Math.round(L.level) + '%';
   }
   function renderLayers() {
     const list = $('glist');
     list.innerHTML = G.layers.length ? G.layers.map(layerHTML).join('') : '<p class="note">No tones. Add one below, or pick a preset.</p>';
     list.querySelectorAll('.layer').forEach(el => syncLayer(el, byId(+el.dataset.id)));
-    $('gcount').textContent = G.layers.length + ' of ' + GMAX;
+    $('gcount').textContent = G.layers.length + ' of ' + GMAX; updateSound();
     $('gadd').disabled = G.layers.length >= GMAX;
   }
   $('glist').addEventListener('input', e => {
@@ -745,7 +829,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       case 'nudge':
         L.freq = clamp(+NUDGE[b.dataset.n](L.freq).toFixed(2), FMIN, FMAX); syncLayer(el, L); applyTone(L, 'freq'); break;
       case 'mute':
-        L.mute = !L.mute; b.setAttribute('aria-pressed', L.mute); applyTone(L, 'level'); break;
+        L.mute = !L.mute; b.setAttribute('aria-pressed', L.mute); applyTone(L, 'level'); updateSound(); break;
+      case 'snap': { const i = noteInfo(L.freq); L.freq = clamp(+i.hz.toFixed(2), FMIN, FMAX); syncLayer(el, L); applyTone(L, 'freq'); break; }
+      case 'pick': openPick(L, b); return;
       case 'remove': {
         const v = voices.get(L.id); if (v) { retire(v); voices.delete(L.id); }
         G.layers = G.layers.filter(x => x !== L); renderLayers(); $('gadd').focus(); break; }
@@ -764,6 +850,69 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
     if (playing) G.layers.forEach(spawnTone);
     saveGen();
   }
+
+  // ---- note picker ----
+  let pk = null; // { id, oct, pc, opener }
+  const pickBtns = () => [...$('pgrid').querySelectorAll('button')];
+  function drawPick() {
+    const L = byId(pk.id); if (!L) return closePick();
+    const cur = noteInfo(L.freq), here = cur.inRange && cur.oct === pk.oct ? cur.pc : -1;
+    $('poct').textContent = pk.oct; $('pocm').disabled = pk.oct <= 0; $('pocp').disabled = pk.oct >= 8;
+    $('pgrid').innerHTML = NS.map((nm, pc) => {
+      const f = midiHz(12 * (pk.oct + 1) + pc), bad = f < FMIN || f > FMAX;
+      return '<button type="button" class="btn" data-pc="' + pc + '" aria-pressed="' + (pc === here) + '"' + (bad ? ' disabled' : '') + ' aria-label="' + nm + pk.oct + (NS[pc] !== NF[pc] ? ' or ' + NF[pc] + pk.oct : '') + ', ' + f.toFixed(2) + ' hertz">' + nm + '</button>';
+    }).join('');
+    $('pinfo').textContent = 'Octave ' + pk.oct + ' · ' + midiHz(12 * (pk.oct + 1)).toFixed(2) + ' to ' + midiHz(12 * (pk.oct + 1) + 11).toFixed(2) + ' Hz';
+  }
+  function openPick(L, opener) {
+    const i = noteInfo(L.freq);
+    pk = { id: L.id, oct: i.inRange ? i.oct : 4, opener };
+    $('pickt').textContent = 'Pick a note for tone ' + (G.layers.indexOf(L) + 1);
+    drawPick(); $('pick').hidden = false;
+    (pickBtns().find(b => b.getAttribute('aria-pressed') === 'true') || pickBtns().find(b => !b.disabled) || $('pickx')).focus();
+  }
+  function closePick(refocus = true) {
+    if ($('pick').hidden) return;
+    $('pick').hidden = true; const o = pk && pk.opener; pk = null;
+    if (refocus && o && o.isConnected) o.focus();
+  }
+  $('pgrid').addEventListener('click', e => {
+    const b = e.target.closest('button[data-pc]'); if (!b || !pk) return;
+    const L = byId(pk.id), el = L && document.querySelector('.layer[data-id="' + L.id + '"]');
+    if (L && el) { L.freq = clamp(+midiHz(12 * (pk.oct + 1) + +b.dataset.pc).toFixed(2), FMIN, FMAX); syncLayer(el, L); applyTone(L, 'freq'); saveGen(); }
+    closePick();
+  });
+  $('pocm').onclick = () => { if (pk && pk.oct > 0) { pk.oct--; drawPick(); } };
+  $('pocp').onclick = () => { if (pk && pk.oct < 8) { pk.oct++; drawPick(); } };
+  $('pickx').onclick = () => closePick();
+  $('pick').addEventListener('click', e => { if (e.target === $('pick')) closePick(); });
+  document.addEventListener('keydown', e => {
+    if ($('pick').hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); closePick(); }
+    else if (e.key === 'Tab') {
+      const f = [$('pickx'), $('pocm'), $('pocp'), ...pickBtns()].filter(x => !x.disabled), i = f.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+    }
+  });
+
+  // ---- reset (two-tap confirm) ----
+  let rstT = 0, toastT = 0;
+  const toast = t => { const el = $('toast'); el.textContent = t; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 2200); };
+  function disarmReset() { clearTimeout(rstT); const b = $('grst'); b.classList.remove('armed'); b.textContent = 'Reset'; b.removeAttribute('aria-label'); }
+  $('grst').onclick = () => {
+    const b = $('grst');
+    if (!b.classList.contains('armed')) {
+      b.classList.add('armed'); b.textContent = 'Tap again to reset'; b.setAttribute('aria-label', 'Tap again to confirm resetting the generator');
+      clearTimeout(rstT); rstT = setTimeout(disarmReset, 3000); return;
+    }
+    disarmReset(); closePick(false);
+    if (playing) stopAll();
+    else if (A) { rampMaster(0); }
+    G.layers = [mkLayer({ wave: 'sine', freq: 440, level: 50 })]; G.noise = mkNoise({ on: false, color: 'white' }); G.vol = 30;
+    if (A) glide(A.nGain.gain, ampNoise());
+    renderLayers(); syncNoiseUI(); syncVol(); saveGenNow(); toast('Generator reset');
+  };
 
   // ---- presets ----
   const T3 = (w, f, l) => ({ wave: w, freq: f, level: l });
