@@ -52,7 +52,7 @@ button{font:inherit;color:inherit}
 .note{font:400 13px/20px var(--f-ui);color:var(--muted);margin:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-main{max-width:560px;margin:0 auto;padding:0 0 calc(64px + 16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
+main{max-width:560px;margin:0 auto;padding:0 0 calc(65px + 8px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px}
 .view{display:flex;flex-direction:column;gap:8px}
 
 /* ---- keys ---- */
@@ -76,7 +76,7 @@ main{max-width:560px;margin:0 auto;padding:0 0 calc(64px + 16px + env(safe-area-
 .screen canvas{display:block;width:100%}
 
 /* ---- shell ---- */
-.topbar{display:flex;align-items:center;gap:8px;min-height:48px}
+.topbar{display:flex;align-items:center;gap:8px;min-height:44px}
 .mark{margin:0;font:500 20px/1 var(--f-mono);letter-spacing:-.02em;flex:1;min-width:0}
 .mark i{font-style:normal;color:var(--accent)}
 .stat{display:inline-flex;align-items:center;gap:8px;font:500 10px/1 var(--f-mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase;padding:0 8px;min-height:24px}
@@ -143,8 +143,6 @@ main{max-width:560px;margin:0 auto;padding:0 0 calc(64px + 16px + env(safe-area-
 .ring .rl{fill:transparent;stroke:var(--screen-dim);stroke-width:1}
 .ring.on .rl{fill:var(--go);stroke:var(--go)}
 .tgc{display:flex;flex-direction:column;gap:8px}
-.trow1{display:flex;gap:16px;align-items:flex-start}
-.trow1 .kcell{width:88px;flex:none}
 .tcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
 .k4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .k4 .key{padding:0 2px}
@@ -164,7 +162,7 @@ main{max-width:560px;margin:0 auto;padding:0 0 calc(64px + 16px + env(safe-area-
 .ncsub{font:500 11px/16px var(--f-mono);letter-spacing:.08em;color:var(--screen-dim);text-transform:uppercase;min-height:16px}
 
 /* ---- generator display ---- */
-.gdisp{height:208px}
+.gdisp{height:172px}
 .gdisp canvas{position:absolute;inset:0;width:100%;height:100%}
 .ov{position:absolute;left:0;top:0;right:0;pointer-events:none;display:flex;justify-content:space-between;gap:8px;padding:8px}
 .ov button{pointer-events:auto}
@@ -188,14 +186,14 @@ main{max-width:560px;margin:0 auto;padding:0 0 calc(64px + 16px + env(safe-area-
 
 /* ---- pads ---- */
 .pads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.padw{position:relative;height:56px}
+.padw{position:relative;height:48px}
 .pad{position:absolute;inset:0;width:100%;height:100%;border:1px solid var(--line2);border-radius:4px;background:var(--key);padding:0;text-align:left;cursor:pointer;
   box-shadow:0 1px 0 var(--line2);transition:transform var(--dur),box-shadow var(--dur),border-color var(--dur)}
 .pad:active{transform:translateY(1px);box-shadow:none}
 .pad[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-.pad .pn{position:absolute;left:8px;top:8px;font:500 10px/16px var(--f-mono);letter-spacing:.12em;color:var(--muted)}
-.pad .pt{position:absolute;left:8px;bottom:8px;font:600 16px/16px var(--f-mono);letter-spacing:-.01em;white-space:nowrap}
-.pad .gl{position:absolute;right:8px;bottom:8px;width:28px;height:14px;color:var(--muted)}
+.pad .pn{position:absolute;left:8px;top:5px;font:500 10px/16px var(--f-mono);letter-spacing:.12em;color:var(--muted)}
+.pad .pt{position:absolute;left:8px;bottom:5px;font:600 16px/16px var(--f-mono);letter-spacing:-.01em;white-space:nowrap}
+.pad .gl{position:absolute;right:8px;bottom:5px;width:28px;height:14px;color:var(--muted)}
 .pad.empty{background:transparent;border-style:dashed;box-shadow:none}
 .pad.empty .pp{position:absolute;inset:0;display:grid;place-items:center;font:400 24px/1 var(--f-mono);color:var(--muted)}
 .pad.muted .pt{color:var(--muted)}
@@ -205,16 +203,28 @@ main{max-width:560px;margin:0 auto;padding:0 0 calc(64px + 16px + env(safe-area-
 .pled.on i{background:var(--accent);border-color:var(--accent)}
 .pled:focus-visible{outline-offset:-4px}
 
-/* ---- knobs ---- */
+/* ---- voice controls ---- */
 .panel{background:var(--panel);border:1px solid var(--line2);border-radius:6px;padding:8px}
-.knobs{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
-.kcell{display:flex;flex-direction:column;align-items:center;min-width:0}
-.knob{width:72px;height:72px;touch-action:none;cursor:ns-resize;border-radius:50%;display:block}
-.knob svg{width:100%;height:100%;display:block;overflow:visible}
-.knob[aria-disabled="true"]{opacity:.35;cursor:default}
+.vc{display:flex;flex-direction:column;gap:8px}
 .kv{font:500 12px/16px var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink);min-height:16px}
-.krow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:8px}
-.krow .key{padding:0 4px}
+.wkeys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.wkeys.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.wkeys .key{position:relative;flex-direction:column;gap:4px;padding:4px 2px;min-height:44px;font-size:10px;letter-spacing:.1em}
+.wkeys .key svg{width:32px;height:16px}
+.wkeys .key .led{position:absolute;right:5px;top:5px;width:6px;height:6px;animation:none!important}
+.rul{display:flex;height:64px}
+.rul canvas{flex:1;min-width:0;width:auto;height:100%;touch-action:none;cursor:ew-resize}
+.rul canvas[aria-disabled="true"]{cursor:default}
+.rul canvas:focus-visible{outline-offset:-3px}
+.key.rz{flex:none;width:52px;min-height:0;height:100%;flex-direction:column;gap:2px;padding:0;border:0;border-left:1px solid var(--screen-line);border-radius:0;background:transparent;color:var(--screen-dim);box-shadow:none}
+.key.rz small{font:500 9px/12px var(--f-mono);letter-spacing:.1em}
+.key.rz[aria-pressed="true"]{background:transparent;color:var(--screen-accent);border-color:var(--screen-line)}
+.key.rz:active:not(:disabled){background:var(--screen-line)}
+.rlab{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.skeys{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.skeys .key{padding:0;font-size:10px;letter-spacing:.04em}
+.lrow{display:grid;grid-template-columns:64px 64px minmax(0,1fr);gap:8px;align-items:end}
+
 
 /* ---- transport ---- */
 .tp1{display:grid;grid-template-columns:128px 1fr;gap:8px;align-items:center}
@@ -229,6 +239,7 @@ input[type=range]::-moz-range-progress{height:2px;background:var(--ink)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:32px;margin-top:-15px;border-radius:2px;background:var(--key);border:1px solid var(--ink);box-shadow:inset 0 0 0 5px var(--key),inset 0 -1px 0 0 var(--ink)}
 input[type=range]::-moz-range-thumb{width:14px;height:30px;border-radius:2px;background:var(--key);border:1px solid var(--ink)}
 input[type=range]:focus-visible{outline-offset:4px}
+.fader input[type=range]{height:44px;margin-top:-10px}
 
 /* ---- sheets ---- */
 .scrim{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center}
@@ -317,9 +328,9 @@ input[type=range]:focus-visible{outline-offset:4px}
         </div>
       </section>
       <section class="panel tgc" aria-label="Target controls">
-        <div class="trow1">
-          <div class="kcell"><span class="lab" id="kl-tgt">Target</span><div class="knob" id="k-tgt" data-k="tgt" role="slider" tabindex="0" aria-labelledby="kl-tgt"></div><output class="kv" id="kv-tgt"></output></div>
-          <div class="tcol">
+        <div class="rlab"><span class="lab" id="kl-tgt">Target level</span><output class="kv" id="kv-tgt"></output></div>
+        <div class="screen rul"><canvas id="rt" role="slider" tabindex="0" aria-labelledby="kl-tgt" aria-orientation="horizontal"></canvas></div>
+        <div class="tcol">
             <span class="lab" id="tadl">Adjust (dB)</span>
             <div class="k4" id="tadj" role="group" aria-labelledby="tadl">
               <button type="button" class="key" data-d="-1" aria-label="Target down 1 dB">-1</button><button type="button" class="key" data-d="-0.5" aria-label="Target down half a dB">-0.5</button><button type="button" class="key" data-d="0.5" aria-label="Target up half a dB">+0.5</button><button type="button" class="key" data-d="1" aria-label="Target up 1 dB">+1</button>
@@ -328,7 +339,6 @@ input[type=range]:focus-visible{outline-offset:4px}
             <div class="k4" id="ttol" role="group" aria-labelledby="ttl">
               <button type="button" class="key" data-v="0.5" aria-pressed="false">±0.5</button><button type="button" class="key" data-v="1" aria-pressed="true">±1</button><button type="button" class="key" data-v="2" aria-pressed="false">±2</button><button type="button" class="key" data-v="3" aria-pressed="false">±3</button>
             </div>
-          </div>
         </div>
         <span class="lab" id="tprl">Presets</span>
         <div class="plist" id="tpre" role="group" aria-labelledby="tprl">
@@ -397,19 +407,28 @@ input[type=range]:focus-visible{outline-offset:4px}
 
     <section class="pads" id="pads" aria-label="Voices"></section>
 
-    <section class="panel" aria-label="Voice controls">
-      <div class="knobs">
-        <div class="kcell"><span class="lab" id="kl-freq">Freq</span><div class="knob" id="k-freq" data-k="freq" role="slider" tabindex="0" aria-labelledby="kl-freq"></div><output class="kv" id="kv-freq"></output></div>
-        <div class="kcell"><span class="lab" id="kl-fine">Fine</span><div class="knob" id="k-fine" data-k="fine" role="slider" tabindex="0" aria-labelledby="kl-fine"></div><output class="kv" id="kv-fine"></output></div>
-        <div class="kcell"><span class="lab" id="kl-level">Level</span><div class="knob" id="k-level" data-k="level" role="slider" tabindex="0" aria-labelledby="kl-level"></div><output class="kv" id="kv-level"></output></div>
-        <div class="kcell"><span class="lab" id="kl-wave">Wave</span><div class="knob" id="k-wave" data-k="wave" role="slider" tabindex="0" aria-labelledby="kl-wave"></div><output class="kv" id="kv-wave"></output></div>
+    <section class="panel vc" aria-label="Voice controls">
+      <div class="wkeys" id="wkeys" role="group" aria-label="Waveform"></div>
+      <div class="screen rul">
+        <canvas id="rf" role="slider" tabindex="0" aria-label="Frequency" aria-orientation="horizontal"></canvas>
+        <button id="kzoom" class="key rz" type="button" aria-pressed="false" aria-label="Zoom: wide span. Switch to narrow"><span>Zoom</span><small id="kzs">Wide</small></button>
       </div>
-      <div class="krow">
-        <button id="kmute" class="key" type="button" aria-pressed="false">Mute</button>
-        <button id="kclear" class="key" type="button">Clear</button>
+      <div class="skeys" role="group" aria-label="Frequency steps">
+        <button id="kdn1" class="key" type="button" aria-label="Down 1 hertz">&minus;1 Hz</button>
+        <button id="kup1" class="key" type="button" aria-label="Up 1 hertz">+1 Hz</button>
+        <button id="kdst" class="key" type="button" aria-label="Down one semitone">&minus;ST</button>
+        <button id="kust" class="key" type="button" aria-label="Up one semitone">+ST</button>
         <button id="khalf" class="key" type="button" aria-label="Down one octave">&divide;2</button>
         <button id="kdbl" class="key" type="button" aria-label="Up one octave">&times;2</button>
-        <button id="ksnap" class="key" type="button">Snap</button>
+        <button id="ksnap" class="key" type="button" aria-label="Snap to nearest note">Snap</button>
+      </div>
+      <div class="lrow">
+        <button id="kmute" class="key" type="button" aria-pressed="false">Mute</button>
+        <button id="kclear" class="key" type="button">Clear</button>
+        <div class="fader">
+          <div class="row"><label class="lab" for="glev">Level</label><output id="glevv" for="glev"></output></div>
+          <input id="glev" type="range" min="0" max="100" step="1" value="50">
+        </div>
       </div>
     </section>
 
@@ -816,7 +835,7 @@ input[type=range]:focus-visible{outline-offset:4px}
 
   // Night-vision mode
   const metas = [...document.querySelectorAll('meta[name="theme-color"]')], metaOrig = metas.map(m => m.content);
-  const redraw = () => { readTokens(); drawDial(); drawTrace(); drawView(); if (genActive()) drawGen(); if (lastDb !== null) $('num').style.color = colorFor(lastDb); drawKnobs(); };
+  const redraw = () => { readTokens(); drawDial(); drawTrace(); drawView(); if (genActive()) drawGen(); if (lastDb !== null) $('num').style.color = colorFor(lastDb); drawRulers(); };
   function setNight(on, persist) {
     document.documentElement.classList.toggle('night', on);
     $('nightbtn').setAttribute('aria-pressed', on);
@@ -895,7 +914,10 @@ input[type=range]:focus-visible{outline-offset:4px}
     square: 'M1 11V3H7.5V11H14V3H20.5V11H27',
     triangle: 'M1 12L7.5 2L14 12L20.5 2L27 12',
     sawtooth: 'M1 12L8 2V12L15 2V12L22 2V12',
-    noise: 'M1 8L3 4L5 11L7 6L9 12L11 3L13 9L15 5L17 11L19 4L21 10L23 6L25 11L27 7'
+    noise: 'M1 8L3 4L5 11L7 6L9 12L11 3L13 9L15 5L17 11L19 4L21 10L23 6L25 11L27 7',
+    noise_white: 'M1 7L2 3L3 11L4 4L5 12L6 2L7 10L8 5L9 12L10 3L11 9L12 4L13 11L14 2L15 10L16 5L17 12L18 3L19 9L20 4L21 11L22 2L23 10L24 5L25 11L26 4L27 8',
+    noise_pink: 'M1 8L2 6L3 9L5 3L6 5L7 4L9 11L10 9L11 12L13 7L14 8L15 5L17 2L18 4L19 3L21 9L22 7L23 10L25 12L26 10L27 11',
+    noise_brown: 'M1 7C4 5 5 3 8 4C11 5 12 11 15 11C18 11 18 5 21 4C23 3 25 6 27 7'
   };
   const glyph = w => '<svg class="gl" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="' + WAVE_PATH[w] + '"/></svg>';
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -928,8 +950,6 @@ input[type=range]:focus-visible{outline-offset:4px}
   const fmtHz = f => String(+f.toFixed(2));
   const fmtHz2 = f => f.toFixed(2);
   const fillRange = el => el.style.setProperty('--p', ((el.value - el.min) / (el.max - el.min) * 100) + '%');
-  const fToSlider = f => Math.round(1000 * Math.log(f / FMIN) / Math.log(FMAX / FMIN));
-  const kfmt = f => f >= 1000 ? (f / 1000).toFixed(2) + 'k' : f.toFixed(f < 100 ? 1 : 0);
 
   let nid = 1;
   const mkLayer = o => {
@@ -1176,102 +1196,202 @@ input[type=range]:focus-visible{outline-offset:4px}
   });
   function selectVoice(k) { sel = k; disarm(); changed(); }
 
-  // ---- knobs ----
-  const KS = 270, K0 = 135; // sweep and start angle in degrees (clockwise from east, SVG space)
-  const pol = (r, a) => { const t = a * Math.PI / 180; return [32 + r * Math.cos(t), 32 + r * Math.sin(t)]; };
-  const arcD = (r, a0, a1) => { if (Math.abs(a1 - a0) < 0.01) return ''; const [x0, y0] = pol(r, a0), [x1, y1] = pol(r, a1); return 'M' + x0.toFixed(2) + ' ' + y0.toFixed(2) + 'A' + r + ' ' + r + ' 0 ' + (Math.abs(a1 - a0) > 180 ? 1 : 0) + ' ' + (a1 > a0 ? 1 : 0) + ' ' + x1.toFixed(2) + ' ' + y1.toFixed(2); };
-  const KN = {
-    freq: {
-      cfg() { const L = curL(); if (!L) return { off: true, min: 0, max: 1000, step: 1, val: 0, text: '--', vtext: 'not used for noise' };
-        return { min: 0, max: 1000, step: 1, val: fToSlider(L.freq), text: kfmt(L.freq), vtext: fmtHz2(L.freq) + ' hertz', def: fToSlider(440) }; },
-      set(v) { const L = curL(); L.freq = clamp(+(FMIN * Math.pow(FMAX / FMIN, v / 1000)).toFixed(2), FMIN, FMAX); applyTone(L, 'freq'); }
-    },
-    fine: {
-      cfg() { const L = curL(); if (!L) return { off: true, min: -50, max: 50, step: 1, val: 0, text: '--', vtext: 'not used for noise', bi: true };
-        const c = clamp(Math.round(noteInfo(L.freq).cents), -50, 50); return { min: -50, max: 50, step: 1, val: c, text: cstr(c) + ' c', vtext: cstr(c) + ' cents', def: 0, bi: true }; },
-      set(v) { const L = curL(), i = noteInfo(L.freq); L.freq = clamp(+(i.hz * Math.pow(2, v / 1200)).toFixed(2), FMIN, FMAX); applyTone(L, 'freq'); }
-    },
-    level: {
-      cfg() { const L = curL(), v = L ? L.level : G.noise.level; return { min: 0, max: 100, step: 1, val: Math.round(v), text: Math.round(v) + '%', vtext: Math.round(v) + ' percent', def: L ? 50 : 40 }; },
-      set(v) { const L = curL(); if (L) { L.level = v; applyTone(L, 'level'); } else { G.noise.level = v; if (A) glide(A.nGain.gain, ampNoise()); } }
-    },
-    wave: {
-      cfg() { const L = curL(); if (!L) { const i = COLORS.indexOf(G.noise.color); return { min: 0, max: 2, step: 1, val: i, text: G.noise.color.toUpperCase(), vtext: G.noise.color + ' noise', def: 1, discrete: true, label: 'Colour' }; }
-        const i = WAVES.indexOf(L.wave); return { min: 0, max: 3, step: 1, val: i, text: WAVE_LABEL[L.wave].toUpperCase(), vtext: L.wave, def: 0, discrete: true, label: 'Wave' }; },
-      set(v) { const L = curL(); if (L) { const w = WAVES[v]; if (w !== L.wave) { L.wave = w; applyTone(L, 'wave'); } } else { const c = COLORS[v]; if (c !== G.noise.color) { G.noise.color = c; respawnNoise(); } } }
-    },
-    tgt: { // meter target level, in half-dB steps
-      cfg() { return { min: 60, max: 220, step: 1, val: Math.round(TG.t * 2), text: fmtT(TG.t) + ' dB', vtext: fmtT(TG.t) + ' decibels', def: 150, travel: 360 }; },
-      set(v) { setTarget(v / 2); },
-      changed() { tgtSync(); }
+  // ---- ruler: one touch-native scrubber, used for frequency (log) and meter target (linear dB) ----
+  const RL = [], RH = 62;
+  function makeRuler(o) {
+    const cv = o.cv, log = o.mode === 'log';
+    const toU = v => log ? Math.log2(v) : v, fromU = u => log ? Math.pow(2, u) : u;
+    const uMin = toU(o.min), uMax = toU(o.max);
+    const r = { zoom: 0, u: uMin, active: false };
+    let drag = null, pinch = null, raf = 0, gl = null, glRaf = 0;
+    const ptrs = new Map();
+    const off = () => !!(o.off && o.off());
+    const span = () => log ? (r.zoom ? 1 : Math.log2(o.max / o.min)) : o.span;
+    const q = u => o.quant ? Math.round(u / o.quant) * o.quant : u;
+    const gain = v => o.fine + (o.fast - o.fine) * clamp((v - 0.2) / 1.8, 0, 1); // units per px: slow = fine, fast = ten times that
+    const sched = () => { if (!raf) raf = requestAnimationFrame(draw); };
+    const apply = u => { r.u = clamp(u, uMin, uMax); o.commit(fromU(q(r.u))); sched(); };
+    function draw() {
+      raf = 0;
+      const w = cv.clientWidth; if (!w) return;
+      const g = fitCanvas(cv, w, RH);
+      g.font = '500 10px ' + T.mono; g.textBaseline = 'alphabetic'; g.lineWidth = 1;
+      if (off()) { g.fillStyle = T.dim; g.textAlign = 'center'; g.fillText(o.offText || '', w / 2, RH / 2 + 3); return; }
+      const sp = span(), ppu = w / sp, uc = q(r.u), X = u => w / 2 + (u - uc) * ppu;
+      const tick = (x, len, col) => { const xx = Math.round(x) + .5; g.strokeStyle = col; g.beginPath(); g.moveTo(xx, 0); g.lineTo(xx, len); g.stroke(); };
+      const lab = (t, x, strong) => { g.fillStyle = strong ? T.ink : T.dim; g.textAlign = 'center'; g.fillText(t, x, 54); };
+      // outside the range: hatch
+      g.strokeStyle = T.line;
+      [[0, Math.min(w, X(uMin))], [Math.max(0, X(uMax)), w]].forEach(([a, b]) => {
+        if (b <= a) return; g.save(); g.beginPath(); g.rect(a, 0, b - a, RH); g.clip(); g.beginPath();
+        for (let x = a - RH; x < b; x += 6) { g.moveTo(x, RH); g.lineTo(x + RH, 0); } g.stroke(); g.restore();
+      });
+      if (log) {
+        const l440 = Math.log2(440);
+        if (ppu / 12 >= 20) { // narrow: semitone ticks, note names, 10 cent ticks
+          const m0 = Math.floor(69 + 12 * (uc - sp / 2 - l440)) - 1, m1 = Math.ceil(69 + 12 * (uc + sp / 2 - l440)) + 1;
+          for (let m = m0; m <= m1; m++) {
+            const pc = ((m % 12) + 12) % 12;
+            if (ppu / 1200 * 10 >= 2.2) for (let j = 1; j < 10; j++) { const uu = l440 + (m - 69 + j / 10) / 12; if (uu >= uMin && uu <= uMax) tick(X(uu), j === 5 ? 9 : 5, T.line); }
+            const u = l440 + (m - 69) / 12; if (u < uMin - 1e-9 || u > uMax + 1e-9) continue;
+            const x = X(u); tick(x, pc === 0 ? 30 : NS[pc].length === 1 ? 22 : 15, pc === 0 ? T.ink : T.dim);
+            lab(NS[pc] + (Math.floor(m / 12) - 1), x, pc === 0);
+          }
+        } else { // wide: log ticks 1 to 9 per decade, labelled majors
+          const MAJ = { 20: '20', 50: '50', 100: '100', 200: '200', 500: '500', 1000: '1k', 2000: '2k', 5000: '5k', 10000: '10k', 20000: '20k' };
+          for (let e = 1; e <= 4; e++) for (let k = 1; k <= 9; k++) {
+            const f = k * Math.pow(10, e); if (f < o.min || f > o.max) continue;
+            const x = X(Math.log2(f)), t = MAJ[f]; if (x < -20 || x > w + 20) continue;
+            tick(x, t ? 30 : 14, t ? T.ink : T.dim); if (t) lab(t, x, false);
+          }
+        }
+      } else { // linear: 0.5 minor, 1 mid, 5 major, labelled every 10
+        for (let k = Math.ceil((uc - sp / 2) * 2); k <= Math.floor((uc + sp / 2) * 2); k++) {
+          const v = k / 2; if (v < o.min - 1e-9 || v > o.max + 1e-9) continue;
+          const x = X(v), five = k % 10 === 0; tick(x, five ? 30 : k % 2 === 0 ? 16 : 8, five ? T.ink : T.dim);
+          if (k % 20 === 0) lab(String(v), x, false);
+        }
+      }
+      const cx = Math.round(w / 2) + .5; // fixed centre hairline
+      g.strokeStyle = T.accent; g.beginPath(); g.moveTo(cx, 0); g.lineTo(cx, RH); g.stroke();
+      g.fillStyle = T.accent; g.beginPath(); g.moveTo(cx - 4, 0); g.lineTo(cx + 4, 0); g.lineTo(cx, 5); g.closePath(); g.fill();
     }
-  };
-  Object.entries(KN).forEach(([k, o]) => {
-    o.el = $('k-' + k);
-    o.el.innerHTML = '<svg viewBox="0 0 64 64" aria-hidden="true"><path class="tr" fill="none" stroke-width="2"/><g class="tk"></g><path class="va" fill="none" stroke-width="3"/><circle class="bd" cx="32" cy="32" r="18" stroke-width="1"/><line class="pt" x1="0" y1="0" x2="0" y2="0" stroke-width="2" stroke-linecap="square"/></svg>';
-    o.q = s => o.el.querySelector(s);
-  });
-  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  function drawKnobs() {
-    const ink = css('--ink'), line2 = css('--line2'), key = css('--key'), acc = css('--accent');
-    Object.entries(KN).forEach(([k, o]) => {
-      const c = o.cfg(), p = (c.val - c.min) / (c.max - c.min), a = K0 + KS * p;
-      const tr = o.q('.tr'); tr.setAttribute('d', arcD(28, K0, K0 + KS - 0.02)); tr.setAttribute('stroke', line2);
-      const va = o.q('.va'); va.setAttribute('stroke', acc);
-      va.setAttribute('d', c.off ? '' : c.bi ? arcD(28, K0 + KS / 2, a) : arcD(28, K0, Math.max(K0 + 0.5, a)));
-      const body = o.q('.bd'); body.setAttribute('fill', key); body.setAttribute('stroke', ink);
-      const pt = o.q('.pt'), [x0, y0] = pol(7, a), [x1, y1] = pol(16, a); pt.setAttribute('x1', x0); pt.setAttribute('y1', y0); pt.setAttribute('x2', x1); pt.setAttribute('y2', y1); pt.setAttribute('stroke', c.off ? line2 : ink);
-      const tk = o.q('.tk'); let h = '';
-      if (c.discrete) for (let i = 0; i <= c.max; i++) { const [tx, ty] = pol(28, K0 + KS * i / c.max); h += '<circle cx="' + tx.toFixed(2) + '" cy="' + ty.toFixed(2) + '" r="2" fill="' + (i <= c.val ? acc : line2) + '"/>'; }
-      else if (c.bi) { const [tx, ty] = pol(32, K0 + KS / 2); h = '<circle cx="' + tx.toFixed(2) + '" cy="' + ty.toFixed(2) + '" r="1.5" fill="' + ink + '"/>'; }
-      tk.innerHTML = h;
-    });
-  }
-  function syncKnobs() {
-    Object.entries(KN).forEach(([k, o]) => {
-      const c = o.cfg(), el = o.el;
-      el.setAttribute('aria-valuemin', c.min); el.setAttribute('aria-valuemax', c.max); el.setAttribute('aria-valuenow', c.val); el.setAttribute('aria-valuetext', c.vtext);
-      el.setAttribute('aria-disabled', !!c.off); el.setAttribute('aria-orientation', 'vertical');
-      $('kv-' + k).textContent = c.text;
-      if (c.label) $('kl-' + k).textContent = c.label;
-    });
-    drawKnobs();
-  }
-  function bindKnob(o) {
-    const el = o.el; let drag = null, lastTap = 0;
-    const commit = v => { const c = o.cfg(); v = clamp(Math.round(v), c.min, c.max); if (v !== c.val) { o.set(v); (o.changed || changed)(); } };
-    el.addEventListener('pointerdown', e => {
-      const c = o.cfg(); el.focus({ preventScroll: true }); if (c.off) return;
-      try { el.setPointerCapture(e.pointerId); } catch {}
-      drag = { x: e.clientX, y: e.clientY, t: e.timeStamp, raw: c.val, moved: 0, t0: e.timeStamp }; e.preventDefault();
-    });
-    el.addEventListener('pointermove', e => {
-      if (!drag) return; const c = o.cfg(), d = (drag.y - e.clientY) + (e.clientX - drag.x);
-      const dt = Math.max(8, e.timeStamp - drag.t), speed = Math.abs(d) / dt, acc = c.discrete ? 1 : 1 + Math.min(2, speed * 1);
-      const travel = c.travel || (c.discrete ? (c.max - c.min + 1) * 36 : (c.max - c.min > 500 ? 420 : 200));
-      drag.raw = clamp(drag.raw + d * acc * ((c.max - c.min) / travel), c.min, c.max);
-      drag.x = e.clientX; drag.y = e.clientY; drag.t = e.timeStamp; drag.moved += Math.abs(d);
-      commit(drag.raw);
-    });
-    const end = e => {
-      if (!drag) return; const tap = drag.moved < 5 && e.timeStamp - drag.t0 < 300; drag = null;
-      if (tap && e.type === 'pointerup') { if (e.timeStamp - lastTap < 340) { lastTap = 0; const c = o.cfg(); if (!c.off) commit(c.def); } else lastTap = e.timeStamp; }
+    r.draw = () => { if (!raf) raf = requestAnimationFrame(draw); };
+    r.sync = () => {
+      const dis = off(), v = o.get();
+      if (!r.active && !dis) r.u = clamp(toU(v), uMin, uMax);
+      cv.setAttribute('aria-disabled', String(dis)); cv.tabIndex = dis ? -1 : 0;
+      cv.setAttribute('aria-valuemin', o.min); cv.setAttribute('aria-valuemax', o.max);
+      cv.setAttribute('aria-valuenow', +v.toFixed(2)); cv.setAttribute('aria-valuetext', o.vtext(v));
+      sched();
     };
-    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
-    el.addEventListener('wheel', e => {
-      const c = o.cfg(); if (c.off) return; e.preventDefault();
-      commit(c.val + (e.deltaY < 0 ? 1 : -1) * (c.discrete ? 1 : Math.max(1, (c.max - c.min) / 50)));
-    }, { passive: false });
-    el.addEventListener('keydown', e => {
-      const c = o.cfg(); if (c.off) return; let v = null; const big = c.discrete ? 1 : (c.max - c.min) / 10;
-      if (e.key === 'ArrowUp' || e.key === 'ArrowRight') v = c.val + c.step;
-      else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') v = c.val - c.step;
-      else if (e.key === 'PageUp') v = c.val + big; else if (e.key === 'PageDown') v = c.val - big;
-      else if (e.key === 'Home') v = c.min; else if (e.key === 'End') v = c.max;
-      if (v === null) return; e.preventDefault(); commit(v);
+    r.setZoom = z => { r.zoom = z; if (o.onZoom) o.onZoom(z); sched(); };
+    function finish() { stopGlide(); r.active = false; r.u = clamp(toU(o.get()), uMin, uMax); sched(); }
+    function stopGlide() { if (glRaf) { cancelAnimationFrame(glRaf); glRaf = 0; } gl = null; }
+    function glideStep(now) {
+      glRaf = 0; if (!gl) return;
+      const dt = Math.min(40, now - gl.t); gl.t = now; gl.v *= Math.exp(-dt / 220);
+      const nu = r.u + gl.v * dt;
+      if (nu <= uMin || nu >= uMax || Math.abs(gl.v) < o.fine * 0.03) { apply(nu); finish(); return; }
+      apply(nu); glRaf = requestAnimationFrame(glideStep);
+    }
+    cv.addEventListener('pointerdown', e => {
+      if (off()) return; cv.focus({ preventScroll: true }); stopGlide();
+      try { cv.setPointerCapture(e.pointerId); } catch {}
+      ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); r.active = true; e.preventDefault();
+      if (ptrs.size === 2 && o.zoom) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1 }; drag = null; }
+      else if (ptrs.size === 1) drag = { id: e.pointerId, x: e.clientX, t: e.timeStamp, ve: -1, dir: 0, moved: e.timeStamp };
     });
+    cv.addEventListener('pointermove', e => {
+      const p = ptrs.get(e.pointerId); if (!p) return; p.x = e.clientX; p.y = e.clientY;
+      if (pinch) {
+        if (ptrs.size < 2) return; const [a, b] = [...ptrs.values()], d = Math.hypot(a.x - b.x, a.y - b.y) || 1, k = d / pinch.d;
+        if (k > 1.3 && !r.zoom) { r.setZoom(1); pinch.d = d; } else if (k < 0.77 && r.zoom) { r.setZoom(0); pinch.d = d; }
+        return;
+      }
+      if (!drag || drag.id !== e.pointerId) return;
+      const dx = e.clientX - drag.x; if (!dx) return;
+      const dt = Math.max(4, e.timeStamp - drag.t), vi = Math.abs(dx) / dt;
+      drag.ve = drag.ve < 0 ? vi : 0.6 * drag.ve + 0.4 * vi; drag.x = e.clientX; drag.t = e.timeStamp; drag.moved = e.timeStamp; drag.dir = dx > 0 ? 1 : -1;
+      apply(r.u - dx * gain(drag.ve)); // the tape follows the finger: dragging right lowers the value under the hairline
+    });
+    const up = e => {
+      if (!ptrs.delete(e.pointerId)) return;
+      if (pinch) { if (ptrs.size < 2) pinch = null; if (!ptrs.size) finish(); return; }
+      const d = drag; if (d && d.id === e.pointerId) drag = null;
+      if (ptrs.size) return;
+      if (d && e.type === 'pointerup' && !reduced.matches && d.ve > 0.3 && e.timeStamp - d.moved < 60) {
+        gl = { v: -d.dir * d.ve * gain(d.ve), t: performance.now() }; glRaf = requestAnimationFrame(glideStep);
+      } else finish();
+    };
+    cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+    cv.addEventListener('wheel', e => {
+      if (off()) return; e.preventDefault(); stopGlide();
+      const n = clamp(e.deltaY / 100, -3, 3); // about 10 fine steps per notch
+      r.u = clamp(toU(o.get()), uMin, uMax); apply(r.u - n * 10 * o.fine);
+    }, { passive: false });
+    cv.addEventListener('keydown', e => {
+      if (off()) return; const v = o.key(e, o.get()); if (v === null || v === undefined) return;
+      e.preventDefault(); stopGlide(); o.commit(v);
+    });
+    if (window.ResizeObserver) new ResizeObserver(sched).observe(cv);
+    RL.push(r); return r;
   }
-  Object.values(KN).forEach(bindKnob);
+  const ST = Math.pow(2, 1 / 12);
+  const fRul = makeRuler({
+    cv: $('rf'), mode: 'log', min: FMIN, max: FMAX, fine: 1 / 1200, fast: 1 / 120, zoom: true, offText: 'Noise has no frequency',
+    off: () => !curL(), get: () => { const L = curL(); return L ? L.freq : 440; },
+    commit: v => { const L = curL(); if (!L) return; const f = clamp(+v.toFixed(2), FMIN, FMAX); if (f === L.freq) return; L.freq = f; applyTone(L, 'freq'); changed(); },
+    vtext: f => { const i = noteInfo(f); return fmtHz(f) + ' hertz' + (i.inRange ? ', ' + i.name + (Math.abs(i.cents) >= 1 ? ' ' + cstr(i.cents) + ' cents' : '') : ''); },
+    key: (e, f) => {
+      const sh = e.shiftKey;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') return sh ? f * ST : f + (f >= 1000 ? 10 : 1);
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') return sh ? f / ST : f - (f > 1000 ? 10 : 1);
+      if (e.key === 'PageUp') return f * 2; if (e.key === 'PageDown') return f / 2;
+      if (e.key === 'Home') return FMIN; if (e.key === 'End') return FMAX; return null;
+    },
+    onZoom: z => { $('kzoom').setAttribute('aria-pressed', String(!!z)); $('kzs').textContent = z ? 'Narrow' : 'Wide'; $('kzoom').setAttribute('aria-label', 'Zoom: ' + (z ? 'narrow, one octave' : 'wide, whole range') + '. Switch to ' + (z ? 'wide' : 'narrow')); }
+  });
+  $('kzoom').onclick = () => fRul.setZoom(fRul.zoom ? 0 : 1);
+  const tRul = makeRuler({
+    cv: $('rt'), mode: 'lin', min: 30, max: 110, span: 24, quant: 0.5, fine: 0.1, fast: 0.5,
+    get: () => TG.t, commit: v => setTarget(v), vtext: t => fmtT(t) + ' decibels',
+    key: (e, t) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowUp') return t + (e.shiftKey ? 5 : 0.5);
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') return t - (e.shiftKey ? 5 : 0.5);
+      if (e.key === 'PageUp') return t + 5; if (e.key === 'PageDown') return t - 5;
+      if (e.key === 'Home') return 30; if (e.key === 'End') return 110; return null;
+    }
+  });
+  const syncRulers = () => { RL.forEach(r => r.sync()); $('kv-tgt').textContent = fmtT(TG.t) + ' dB'; };
+  function drawRulers() { RL.forEach(r => r.draw()); }
+
+  // ---- wave keys (tones) or colour keys (noise) ----
+  const wk = $('wkeys');
+  function syncWave() {
+    const L = curL(), kind = L ? 'w' : 'n', vals = L ? WAVES : COLORS, cur = L ? L.wave : G.noise.color;
+    if (wk.dataset.kind !== kind) {
+      wk.dataset.kind = kind; wk.className = 'wkeys' + (L ? '' : ' n3'); wk.setAttribute('aria-label', L ? 'Waveform' : 'Noise colour');
+      wk.innerHTML = vals.map(v => '<button type="button" class="key" data-v="' + v + '" aria-pressed="false">' + glyph(L ? v : 'noise_' + v) + '<span>' + (L ? WAVE_LABEL[v] : v) + '</span><i class="led"></i></button>').join('');
+    }
+    wk.querySelectorAll('button').forEach(b => { const on = b.dataset.v === cur; b.setAttribute('aria-pressed', String(on)); b.tabIndex = on ? 0 : -1; });
+  }
+  function pickWave(v) {
+    const L = curL();
+    if (L) { if (v !== L.wave) { L.wave = v; applyTone(L, 'wave'); } }
+    else if (v !== G.noise.color) { G.noise.color = v; respawnNoise(); }
+    changed();
+  }
+  wk.addEventListener('click', e => { const b = e.target.closest('button'); if (b) pickWave(b.dataset.v); });
+  wk.addEventListener('keydown', e => { // radio-group behaviour: arrows move the selection
+    const bs = [...wk.querySelectorAll('button')], n = bs.length; let i = bs.indexOf(e.target.closest('button')); if (i < 0) return;
+    const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+    if (d) i = (i + d + n) % n; else if (e.key === 'Home') i = 0; else if (e.key === 'End') i = n - 1; else return;
+    e.preventDefault(); pickWave(bs[i].dataset.v); wk.querySelectorAll('button')[i].focus();
+  });
+
+  // ---- faders: one control type for the voice level and the master ----
+  function bindFader(inp, def) {
+    let down = null, lastTap = 0;
+    inp.addEventListener('pointerdown', e => { down = { x: e.clientX, t: e.timeStamp }; });
+    inp.addEventListener('pointerup', e => {
+      if (!down) return; const d = down; down = null;
+      if (Math.abs(e.clientX - d.x) > 6 || e.timeStamp - d.t > 350) { lastTap = 0; return; }
+      const rc = inp.getBoundingClientRect(), p = (inp.value - inp.min) / (inp.max - inp.min), cap = rc.left + 8 + (rc.width - 16) * p;
+      if (Math.abs(e.clientX - cap) > 24) { lastTap = 0; return; }
+      if (e.timeStamp - lastTap < 340) { lastTap = 0; inp.value = def; inp.dispatchEvent(new Event('input', { bubbles: true })); } else lastTap = e.timeStamp;
+    });
+    inp.addEventListener('pointercancel', () => { down = null; });
+  }
+  const lev = $('glev');
+  function syncLevel() { const L = curL(), v = Math.round(L ? L.level : G.noise.level); lev.value = v; fillRange(lev); $('glevv').textContent = v + '%'; lev.setAttribute('aria-valuetext', v + ' percent'); }
+  lev.addEventListener('input', () => {
+    const v = +lev.value, L = curL();
+    if (L) { L.level = v; applyTone(L, 'level'); } else { G.noise.level = v; if (A) glide(A.nGain.gain, ampNoise()); }
+    changed();
+  });
+  bindFader(lev, 50); bindFader($('gvol'), 30);
+  const syncCtl = () => { syncWave(); syncLevel(); syncRulers(); };
 
   // ---- key row ----
   let armT = 0, armed = null;
@@ -1285,7 +1405,8 @@ input[type=range]:focus-visible{outline-offset:4px}
   function syncKeys() {
     const L = curL(), isN = sel === 'n', muted = isN ? !G.noise.on : !!L && L.mute;
     $('kmute').setAttribute('aria-pressed', String(muted)); $('kmute').setAttribute('aria-label', muted ? 'Unmute selected voice' : 'Mute selected voice');
-    $('kclear').disabled = isN; $('khalf').disabled = isN; $('kdbl').disabled = isN; $('ksnap').disabled = isN || !(L && noteInfo(L.freq).inRange);
+    ['kclear', 'kdn1', 'kup1', 'kdst', 'kust', 'khalf', 'kdbl', 'kzoom'].forEach(id => { $(id).disabled = isN; });
+    $('ksnap').disabled = isN || !(L && noteInfo(L.freq).inRange);
   }
   $('kmute').onclick = () => toggleMute(sel);
   $('kclear').onclick = () => {
@@ -1295,12 +1416,14 @@ input[type=range]:focus-visible{outline-offset:4px}
       G.slots[i] = null; const f = G.slots.findIndex(Boolean); sel = f >= 0 ? f : 'n'; changed(); toast('Voice ' + (i + 1) + ' cleared');
     }, 'clear voice ' + (i + 1));
   };
-  const octave = f => () => { const L = curL(); if (!L) return; L.freq = clamp(+f(L.freq).toFixed(2), FMIN, FMAX); applyTone(L, 'freq'); changed(); };
-  $('khalf').onclick = octave(x => x / 2); $('kdbl').onclick = octave(x => x * 2);
+  const nudge = f => () => { const L = curL(); if (!L) return; L.freq = clamp(+f(L.freq).toFixed(2), FMIN, FMAX); applyTone(L, 'freq'); changed(); };
+  $('kdn1').onclick = nudge(x => x - 1); $('kup1').onclick = nudge(x => x + 1);
+  $('kdst').onclick = nudge(x => x / ST); $('kust').onclick = nudge(x => x * ST);
+  $('khalf').onclick = nudge(x => x / 2); $('kdbl').onclick = nudge(x => x * 2);
   function snapSel() { const L = curL(); if (!L) return; const i = noteInfo(L.freq); L.freq = clamp(+i.hz.toFixed(2), FMIN, FMAX); applyTone(L, 'freq'); changed(); }
   $('ksnap').onclick = snapSel; $('dsnap').onclick = snapSel;
 
-  function changed() { syncDisplay(); syncKnobs(); syncPads(); syncKeys(); kickGen(); saveGen(); }
+  function changed() { syncDisplay(); syncCtl(); syncPads(); syncKeys(); kickGen(); saveGen(); }
 
   // ---- frequency entry ----
   $('dfreq').onclick = e => { const L = curL(); if (!L) return; $('fin').value = fmtHz(L.freq); openSheet('fsheet', e.currentTarget, $('fin')); $('fin').select(); };
@@ -1402,7 +1525,7 @@ input[type=range]:focus-visible{outline-offset:4px}
   window.__decibelGenRms = 0;
   function drawGen() {
     const c = $('gdisp'), w = c.clientWidth; if (!w) return;
-    const H = 208, SC = 128, live = A && playing, g = fitCanvas(c, w, H);
+    const H = 172, SC = 104, live = A && playing, g = fitCanvas(c, w, H);
     if (live) { A.an.getFloatTimeDomainData(A.tbuf); A.an.getByteFrequencyData(A.fbuf); }
     let rms = 0, pk = 0;
     if (live) { const b = A.tbuf; let s = 0; for (let i = 0; i < b.length; i++) { s += b[i] * b[i]; const a = Math.abs(b[i]); if (a > pk) pk = a; } rms = Math.sqrt(s / b.length); }
@@ -1735,7 +1858,7 @@ input[type=range]:focus-visible{outline-offset:4px}
   function tgtSync() {
     $('tg-lab').textContent = 'Target ' + fmtT(TG.t) + ' ' + unitText() + ' ±' + fmtT(TG.tol);
     $('ttol').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.v === TG.tol)));
-    syncKnobs(); tgtText(); drawDial();
+    syncRulers(); tgtText(); drawDial();
   }
   function tgtIdle() { tgtT = 0; tgtText(); }
   function tgtStep(db, dt) {
@@ -1760,7 +1883,7 @@ input[type=range]:focus-visible{outline-offset:4px}
   });
   $('tgen').onclick = () => { genPinkOnly(); };
 
-  buildPads(); renderPresets(); syncVol(); syncPlayKey(); readTokens(); syncDisplay(); syncKnobs(); syncKeys();
+  buildPads(); renderPresets(); syncVol(); syncPlayKey(); readTokens(); syncDisplay(); syncCtl(); syncKeys();
   setView(view, false); tgtSync();
 
   // Install prompt

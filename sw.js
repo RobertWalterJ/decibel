@@ -1,4 +1,4 @@
-const OWN = 'decibel-v7';
+const OWN = 'decibel-v8';
 const SHELL = ['./', './index.html', './icon.svg', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png'];
 const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
 
