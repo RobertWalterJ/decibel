@@ -13,3 +13,14 @@ Live: https://robertwalterj.github.io/decibel/
 ## Calibration
 
 Phone microphones are not calibrated, so readings are estimates, typically within a few dB. Play a known level next to a real sound level meter and adjust the calibration offset in Settings until the two match. The offset is saved on the device.
+
+## Generator
+
+The Generator tab makes sound for testing and for measuring with the Meter tab, which keeps running while you play.
+
+- **Noise:** white, pink or brown, with its own level.
+- **Tone layers:** up to 8 sine, square, triangle or saw tones. Set each by a log slider (20 Hz to 20 kHz), a typed value in Hz, nudge buttons (-1 Hz, +1 Hz, half, double) and see the nearest note. All layers mix through the master volume and a soft limiter.
+- **Presets:** six built in, plus up to 6 of your own with Save current. Presets replace the layers (saved ones also restore the noise).
+- **Master:** Play all / Stop all, volume (always 30% on launch, shown in % and dBFS), with a live oscilloscope and spectrum.
+
+Start quiet. High frequencies and square or saw waves can sound much louder than they read. Audio keeps playing when the app is in the background; only the scope drawing pauses.
