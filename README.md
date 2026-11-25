@@ -16,7 +16,14 @@ Phone microphones are not calibrated, so readings are estimates, typically withi
 
 ## Meter
 
-A near-black display holds the large reading, an everyday-sound label, a 40 segment LED bar (20 to 120 dB, with a peak-hold segment) and the 60 second trace. Below it sit a MIN / LEQ / MAX / TIME strip and the START, RESET and SETUP keys. Setup (a sheet) holds A or Z weighting, Fast or Slow response and the calibration offset.
+The top display is an analog dial (20 to 120 dB, 240 degrees) with a coloured zone band, a damped needle (about 150 ms fast, 600 ms slow), a 2 second peak-hold tick, a hollow marker for the session maximum and, in Target view, a band for the target. The large reading, unit and an everyday-sound label sit inside the dial. A 3 by 2 strip shows LEQ, MIN, MAX, L10, L90 and PEAK, with TIME in the display header. Setup (a sheet) holds A, C or Z weighting, Fast or Slow response and the calibration offset.
+
+Four keys choose the lower display. The choice is remembered.
+
+- **Level:** the 60 second trace, HOLD, EXPORT (CSV of per-second rows with a session summary at the top) and a NIOSH exposure line (safe time at the last 60 seconds, plus session dose, A-weighting only).
+- **Target:** set a target level and tolerance with the knob or keys, see how far off you are in plain words, and get a STEADY light after 3 seconds on target. Presets set weighting and response for speaker and cinema reference levels. One key opens the Generator with pink noise at 50%.
+- **Spectrum:** octave bands from 63 Hz to 8 kHz (flat weighting), the dominant frequency with its note and cents, and TONAL and mains hum flags.
+- **Room:** a plain-language noise character (steady, fluctuating, impulsive, and low rumble, hum, voices, hiss or tonal), an NC rating with the limiting band and a chart against the matching curve, and an echo test: tap Measure echo, clap once, and read RT60 from the decay (500 Hz and 1 kHz).
 
 ## Generator
 
