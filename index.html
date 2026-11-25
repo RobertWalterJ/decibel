@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Decibel Meter</title>
+<meta name="description" content="A calm, calibratable sound level meter with A-weighting.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#F4F6F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1115" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Visual system shared with RowCast: same tokens, cards, pills, segmented controls and factor tiles. */
+:root{
+  --bg:#F4F6F6; --surface:#FFFFFF; --glass:rgba(255,255,255,.86); --sunk:#EBEFF0; --ink:#0E1B22; --muted:#5A6A72; --line:#D8DFE2;
+  --accent:#0B6E82; --accent-ink:#FFFFFF; --accent-soft:#DDF0F3;
+  --go:#178A55; --caution:#C27A00; --stop:#C8322A; --info:#3563B5;
+  --port:#1E8E4E; --stbd:#D13A2E; --magenta:#B0177F;
+  --f-ui:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 6px 24px rgba(10,30,40,.14),0 1px 3px rgba(10,30,40,.10);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1115; --surface:#121B21; --glass:rgba(16,24,30,.86); --sunk:#0E161B; --ink:#E5EDF0; --muted:#8FA1AA; --line:#23323A;
+  --accent:#4FB7CB; --accent-ink:#04222A; --accent-soft:#12313A;
+  --go:#46C487; --caution:#F2A93B; --stop:#FF6A5F; --info:#86A9EC; --port:#3DBB76; --stbd:#FF6A5F; --magenta:#E05BB4;
+  --shadow:0 6px 24px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1115; --surface:#121B21; --glass:rgba(16,24,30,.86); --sunk:#0E161B; --ink:#E5EDF0; --muted:#8FA1AA; --line:#23323A;
+  --accent:#4FB7CB; --accent-ink:#04222A; --accent-soft:#12313A;
+  --go:#46C487; --caution:#F2A93B; --stop:#FF6A5F; --info:#86A9EC; --port:#3DBB76; --stbd:#FF6A5F; --magenta:#E05BB4;
+  --shadow:0 6px 24px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4); color-scheme:dark}
+/* night-vision mode: red-shifted UI */
+:root.night{--bg:#050404; --surface:#0D0807; --glass:rgba(14,8,7,.9); --sunk:#090505; --ink:#E07A6A; --muted:#8C4A40; --line:#2A1512;
+  --accent:#D0503F; --accent-ink:#1A0604; --accent-soft:#2A100C; --go:#9A6A3A; --caution:#C8603A; --stop:#FF4A3A; --info:#B0584A; color-scheme:dark}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overscroll-behavior:none}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:15px;line-height:1.4;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation;
+  padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px))}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;min-width:0}
+
+main{max-width:560px;min-height:100%;margin:0 auto;padding-block:12px 24px;display:flex;flex-direction:column;gap:16px}
+.topbar{display:flex;align-items:center;gap:10px;min-height:44px}
+.topbar h1{margin:0;font-size:1.35rem;font-weight:800;letter-spacing:-.01em;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.pill.on{color:var(--go)} .pill.on::before{background:var(--go)}
+@media (prefers-reduced-motion: no-preference){.pill.on::before{animation:pulse 1.6s ease-in-out infinite}}
+@keyframes pulse{50%{opacity:.35}}
+.iconbtn{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--glass);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);flex:none}
+.iconbtn svg{width:22px;height:22px}
+.iconbtn[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+
+/* install card */
+.install{display:flex;align-items:center;gap:10px;background:var(--accent-soft);border:1px solid var(--line);border-radius:18px;padding:10px 8px 10px 12px}
+.install img{width:40px;height:40px;border-radius:10px;flex:none}
+.install p{margin:0;flex:1;min-width:0;font-weight:700;font-size:.9rem;line-height:1.25}
+.install .x{width:44px;height:44px;border:0;background:none;color:var(--muted);font-size:1.5rem;line-height:1;cursor:pointer;border-radius:12px;flex:none}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;min-height:44px;font-weight:700;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.full{width:100%}
+.btn.go{height:56px;font-size:1.1rem;border-radius:16px}
+.btn.go.live{background:var(--stop);border-color:var(--stop);color:#fff}
+:root[data-theme="dark"] .btn.go.live,:root.night .btn.go.live{color:#1A0604}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.go.live{color:#1A0604}}
+
+/* hero */
+.hero{padding:16px 16px 14px}
+.dialwrap{position:relative}
+#dial{display:block;width:100%}
+.readout{position:absolute;left:0;right:0;top:var(--cy,150px);transform:translateY(-100%);text-align:center;pointer-events:none;white-space:nowrap}
+.num{font-family:var(--f-mono);font-weight:500;font-size:3.7rem;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.unit{font-family:var(--f-mono);font-weight:500;font-size:.9rem;color:var(--muted);margin-left:6px}
+.label{text-align:center;font-weight:700;font-size:1rem;min-height:1.5em;margin-top:6px}
+
+/* stat tiles, same anatomy as RowCast .factor */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.factor{border:1px solid var(--line);border-radius:14px;padding:11px 10px;display:flex;flex-direction:column;gap:6px;background:var(--surface);min-width:0}
+.factor .top{font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.factor .val{font-family:var(--f-mono);font-size:1.4rem;font-weight:500;font-variant-numeric:tabular-nums;line-height:1}
+
+.trace-card{padding:14px 14px 10px}
+.trace-card .eyebrow{margin-bottom:8px}
+#trace{width:100%;height:120px;display:block}
+
+.err{color:var(--stop);font-weight:600;font-size:.9rem;margin:0}
+.actions{display:flex;flex-direction:column;gap:10px}
+
+/* settings */
+.settings{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.row>label,.row>span.lab{font-weight:700;font-size:.95rem}
+.seg{display:flex;background:var(--sunk);border-radius:12px;padding:3px;gap:3px}
+.seg button{min-height:44px;min-width:64px;border:0;background:none;border-radius:9px;padding:8px 12px;font-weight:700;font-size:.85rem;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.stepper{display:flex;align-items:center;gap:6px}
+.stepper .btn{width:44px;padding:0;font-size:1.2rem}
+.stepper output{font-family:var(--f-mono);font-weight:500;min-width:3.4em;text-align:center;font-variant-numeric:tabular-nums}
+.note{font-size:.78rem;color:var(--muted);margin:0;line-height:1.45}
+</style>
+</head>
+<body>
+<main>
+  <header class="topbar">
+    <h1>Decibel Meter</h1>
+    <span id="status" class="pill" role="status">Paused</span>
+    <button id="nightbtn" class="iconbtn" type="button" aria-pressed="false" aria-label="Night vision mode">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+    </button>
+  </header>
+
+  <aside id="install" class="install" hidden>
+    <img src="icon-192.png" alt="" width="40" height="40">
+    <p>Add Decibel Meter to your home screen</p>
+    <button id="installbtn" class="btn primary" type="button">Install</button>
+    <button id="installx" class="x" type="button" aria-label="Dismiss">&times;</button>
+  </aside>
+
+  <section class="card hero" aria-label="Sound level">
+    <div class="dialwrap" id="dialwrap">
+      <canvas id="dial" role="img" aria-label="Sound level dial"></canvas>
+      <div class="readout"><span class="num" id="num">--</span><span class="unit" id="unit">dB(A)</span></div>
+    </div>
+    <div class="label" id="ref">Tap Start to measure</div>
+  </section>
+
+  <section class="stats" aria-label="Session statistics">
+    <div class="factor"><div class="top">Min</div><div class="val" id="min">--</div></div>
+    <div class="factor"><div class="top" title="Average level">Leq</div><div class="val" id="leq">--</div></div>
+    <div class="factor"><div class="top">Max</div><div class="val" id="max">--</div></div>
+    <div class="factor"><div class="top">Time</div><div class="val" id="dur">0:00</div></div>
+  </section>
+
+  <section class="card trace-card" aria-label="Last 60 seconds">
+    <div class="eyebrow">Last 60 seconds</div>
+    <canvas id="trace"></canvas>
+  </section>
+
+  <div class="actions">
+    <button id="go" class="btn primary full go" type="button">Start</button>
+    <button id="reset" class="btn full" type="button">Reset</button>
+    <p id="err" class="err" role="alert" hidden></p>
+  </div>
+
+  <section class="card settings" aria-label="Settings">
+    <div class="eyebrow">Settings</div>
+    <div class="row"><span class="lab" id="wl">Weighting</span>
+      <div class="seg" id="wseg" role="group" aria-labelledby="wl"><button type="button" data-v="A" aria-pressed="true">A</button><button type="button" data-v="Z" aria-pressed="false">Z (flat)</button></div></div>
+    <div class="row"><span class="lab" id="rl">Response</span>
+      <div class="seg" id="rseg" role="group" aria-labelledby="rl"><button type="button" data-v="fast" aria-pressed="true">Fast</button><button type="button" data-v="slow" aria-pressed="false">Slow</button></div></div>
+    <div class="row"><span class="lab" id="cl">Calibration offset</span>
+      <div class="stepper" role="group" aria-labelledby="cl"><button type="button" class="btn" id="calm" aria-label="Decrease offset">&minus;</button><output id="calv">0</output><button type="button" class="btn" id="calp" aria-label="Increase offset">+</button></div></div>
+    <p class="note">Phone microphones are not calibrated, so readings are estimates, typically within a few dB. To calibrate, play a known level next to a real meter and adjust the offset until they match. Fast uses a 125 ms time constant, Slow uses 1 s. Prolonged exposure above 85 dB(A) can damage hearing.</p>
+  </section>
+</main>
+
+<script>
+(() => {
+  const K = 'decibel:';
+  const load = (k, d) => { try { const v = localStorage.getItem(K + k); return v === null ? d : JSON.parse(v); } catch { return d; } };
+  const save = (k, v) => { try { localStorage.setItem(K + k, JSON.stringify(v)); } catch {} };
+
+  // Full-scale sine ~ this many dB SPL on a typical phone mic. Tuned by the user's offset.
+  const BASE = 94;
+  const MIN_DB = 20, MAX_DB = 120;
+  let weighting = load('weighting', 'A'), response = load('response', 'fast'), offset = load('offset', 0);
+
+  const $ = id => document.getElementById(id);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Design tokens are read once and again whenever theme or night mode changes.
+  let T = {};
+  const readTokens = () => {
+    const s = getComputedStyle(document.documentElement), g = n => s.getPropertyValue(n).trim();
+    T = { go: g('--go'), caution: g('--caution'), stop: g('--stop'), sunk: g('--sunk'), ink: g('--ink'), muted: g('--muted'), line: g('--line'), surface: g('--surface'), mono: g('--f-mono') };
+  };
+  const colorFor = db => db >= 85 ? T.stop : db >= 70 ? T.caution : T.go;
+
+  const REFS = [[30,'Whisper'],[40,'Quiet library'],[50,'Quiet office'],[60,'Conversation'],[70,'Busy restaurant'],[80,'City traffic'],[85,'Hearing risk with long exposure'],[95,'Motorcycle'],[105,'Concert'],[115,'Very loud, limit exposure']];
+  const describe = db => { let t = 'Near silence'; for (const [lv, s] of REFS) if (db >= lv - 5) t = s; return t; };
+
+  let ctx, stream, src, analyser, chain = [], buf, raf, wakeLock;
+  let level = null, sumEnergy = 0, count = 0, min = Infinity, max = -Infinity, t0 = 0, elapsed = 0;
+  const history = []; // [time, db]
+  let shown = null, lastDraw = 0, lastDb = null; // eased display value for the dial
+
+  function buildChain() {
+    chain.forEach(n => n.disconnect()); src.disconnect(); chain = [];
+    if (weighting === 'A') {
+      // Biquad approximation of IEC 61672 A-weighting
+      const f = (type, freq) => { const b = ctx.createBiquadFilter(); b.type = type; b.frequency.value = freq; b.Q.value = 0.7071; return b; };
+      chain = [f('highpass',20.6), f('highpass',20.6), f('highpass',107.7), f('highpass',737.9), f('lowpass',12194), f('lowpass',12194)];
+      const g = ctx.createGain(); g.gain.value = Math.pow(10, 2.0 / 20); chain.push(g);
+    }
+    let node = src; for (const n of chain) { node.connect(n); node = n; } node.connect(analyser);
+    $('unit').textContent = weighting === 'A' ? 'dB(A)' : 'dB(Z)';
+  }
+
+  async function start() {
+    $('err').hidden = true;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+    } catch (e) {
+      $('err').textContent = 'Microphone access was blocked. Allow the microphone for this site in your browser settings, then tap Start again.';
+      $('err').hidden = false; return;
+    }
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    src = ctx.createMediaStreamSource(stream);
+    analyser = ctx.createAnalyser(); analyser.fftSize = 2048;
+    buf = new Float32Array(analyser.fftSize);
+    buildChain();
+    t0 = performance.now() - elapsed * 1000;
+    try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {}
+    $('go').textContent = 'Stop'; $('go').classList.add('live');
+    $('status').textContent = 'Live'; $('status').classList.add('on');
+    let last = performance.now(); const settle = last + 500;
+    const tick = now => {
+      const dt = (now - last) / 1000; last = now;
+      analyser.getFloatTimeDomainData(buf);
+      let s = 0; for (let i = 0; i < buf.length; i++) s += buf[i] * buf[i];
+      const ms = s / buf.length;
+      const tau = response === 'fast' ? 0.125 : 1.0;
+      const a = 1 - Math.exp(-dt / tau);
+      level = level === null ? ms : level + a * (ms - level);
+      const db = Math.max(MIN_DB, 10 * Math.log10(level + 1e-12) + BASE + offset);
+      if (now > settle) { sumEnergy += Math.pow(10, db / 10); count++; min = Math.min(min, db); max = Math.max(max, db); }
+      elapsed = (now - t0) / 1000;
+      history.push([elapsed, db]);
+      while (history.length && history[0][0] < elapsed - 60) history.shift();
+      render(db);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+  }
+
+  function stop() {
+    cancelAnimationFrame(raf);
+    stream?.getTracks().forEach(t => t.stop());
+    ctx?.close(); ctx = null; level = null;
+    wakeLock?.release?.(); wakeLock = null;
+    $('go').textContent = 'Start'; $('go').classList.remove('live');
+    $('status').textContent = 'Paused'; $('status').classList.remove('on');
+  }
+
+  function reset() {
+    sumEnergy = 0; count = 0; min = Infinity; max = -Infinity; elapsed = 0; history.length = 0;
+    t0 = performance.now();
+    ['min','leq','max'].forEach(id => $(id).textContent = '--'); $('dur').textContent = '0:00';
+    if (!ctx) { $('num').textContent = '--'; $('num').style.color = ''; $('ref').textContent = 'Tap Start to measure'; lastDb = null; shown = null; drawDial(); }
+    drawTrace();
+  }
+
+  let lastText = 0;
+  function render(db) {
+    // Ease the displayed dial value toward the measured one each frame.
+    const now = performance.now(), dt = Math.min(0.1, (now - (lastDraw || now)) / 1000); lastDraw = now;
+    lastDb = db;
+    shown = (shown === null || reduced.matches) ? db : shown + (db - shown) * (1 - Math.exp(-dt / 0.09));
+    drawDial(); drawTrace();
+    if (now - lastText > 200) {
+      lastText = now;
+      $('num').textContent = db.toFixed(0);
+      $('num').style.color = colorFor(db);
+      $('ref').textContent = describe(db);
+      if (count) {
+        $('min').textContent = min.toFixed(0);
+        $('max').textContent = max.toFixed(0);
+        $('leq').textContent = (10 * Math.log10(sumEnergy / count)).toFixed(0);
+      }
+      const m = Math.floor(elapsed / 60), s = Math.floor(elapsed % 60);
+      $('dur').textContent = m + ':' + String(s).padStart(2, '0');
+    }
+  }
+
+  function fitCanvas(c, w, h) {
+    const dpr = window.devicePixelRatio || 1;
+    if (c.width !== Math.round(w * dpr) || c.height !== Math.round(h * dpr)) { c.width = Math.round(w * dpr); c.height = Math.round(h * dpr); }
+    c.style.height = h + 'px';
+    const g = c.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
+    return g;
+  }
+
+  function drawDial() {
+    const c = $('dial'), W = c.parentElement.clientWidth;
+    if (!W) return;
+    const R = Math.min(W * 0.32, 150), cx = W / 2, cy = R + 52, H = cy + 14;
+    const g = fitCanvas(c, W, H);
+    $('dialwrap').style.setProperty('--cy', cy + 'px');
+    const a0 = Math.PI * 1.05, a1 = Math.PI * 1.95;
+    const ang = v => a0 + (a1 - a0) * (Math.min(MAX_DB, Math.max(MIN_DB, v)) - MIN_DB) / (MAX_DB - MIN_DB);
+    const arc = (r, from, to) => { g.beginPath(); g.arc(cx, cy, r, from, to); g.stroke(); };
+    g.lineCap = 'round';
+    // track
+    g.lineWidth = 18; g.strokeStyle = T.sunk; arc(R, a0, a1);
+    // zone band outside the track
+    g.lineWidth = 4; g.lineCap = 'butt'; g.globalAlpha = .85;
+    [[MIN_DB,70,T.go],[70,85,T.caution],[85,MAX_DB,T.stop]].forEach(([lo,hi,col]) => { g.strokeStyle = col; arc(R + 18, ang(lo), ang(hi)); });
+    g.globalAlpha = 1; g.lineCap = 'round';
+    // tick labels every 20 dB
+    g.fillStyle = T.muted; g.font = '500 11px ' + T.mono; g.textAlign = 'center'; g.textBaseline = 'middle';
+    for (let v = MIN_DB; v <= MAX_DB; v += 20) { const a = ang(v); g.fillText(v, cx + Math.cos(a) * (R + 36), cy + Math.sin(a) * (R + 36)); }
+    if (shown !== null) {
+      const col = colorFor(shown);
+      g.save(); g.shadowColor = col; g.shadowBlur = 14; g.lineWidth = 18; g.strokeStyle = col;
+      arc(R, a0, Math.max(a0 + 0.001, ang(shown))); g.restore();
+      if (max > -Infinity) { // max-hold tick
+        const a = ang(max); g.lineWidth = 3; g.lineCap = 'butt'; g.strokeStyle = T.ink;
+        g.beginPath(); g.moveTo(cx + Math.cos(a) * (R - 15), cy + Math.sin(a) * (R - 15));
+        g.lineTo(cx + Math.cos(a) * (R + 12), cy + Math.sin(a) * (R + 12)); g.stroke();
+      }
+    }
+  }
+
+  function drawTrace() {
+    const c = $('trace'), w = c.clientWidth, h = 120;
+    if (!w) return;
+    const g = fitCanvas(c, w, h);
+    const lo = 30, hi = 110, padL = 30;
+    const y = v => h - 6 - (h - 12) * (Math.min(hi, Math.max(lo, v)) - lo) / (hi - lo);
+    g.font = '400 10px ' + T.mono; g.fillStyle = T.muted; g.textBaseline = 'middle'; g.textAlign = 'left'; g.lineWidth = 1;
+    for (const v of [40, 60, 85, 100]) {
+      const stop = v === 85;
+      g.setLineDash(stop ? [5, 4] : []);
+      g.strokeStyle = stop ? T.stop : T.line; g.globalAlpha = stop ? .9 : .7;
+      g.beginPath(); g.moveTo(padL, y(v)); g.lineTo(w, y(v)); g.stroke();
+      g.globalAlpha = 1; g.fillText(v, 0, y(v));
+    }
+    g.setLineDash([]);
+    if (!history.length) return;
+    const col = colorFor(history[history.length - 1][1]);
+    const tEnd = history[history.length - 1][0], x = t => padL + (w - padL) * (1 - (tEnd - t) / 60);
+    g.beginPath(); g.moveTo(x(history[0][0]), h);
+    history.forEach(([t, v]) => g.lineTo(x(t), y(v)));
+    g.lineTo(x(tEnd), h); g.closePath();
+    g.fillStyle = col; g.globalAlpha = .18; g.fill(); g.globalAlpha = 1;
+    g.beginPath(); history.forEach(([t, v], i) => i ? g.lineTo(x(t), y(v)) : g.moveTo(x(t), y(v)));
+    g.strokeStyle = col; g.lineWidth = 2; g.lineJoin = 'round'; g.stroke();
+  }
+
+  function seg(id, value, set) {
+    const el = $(id);
+    const sync = v => el.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === v));
+    sync(value);
+    el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; sync(b.dataset.v); set(b.dataset.v); });
+  }
+  seg('wseg', weighting, v => { weighting = v; save('weighting', v); if (ctx) buildChain(); else $('unit').textContent = v === 'A' ? 'dB(A)' : 'dB(Z)'; reset(); });
+  seg('rseg', response, v => { response = v; save('response', v); });
+  const showCal = () => $('calv').textContent = (offset > 0 ? '+' : '') + offset;
+  $('calm').onclick = () => { offset--; save('offset', offset); showCal(); };
+  $('calp').onclick = () => { offset++; save('offset', offset); showCal(); };
+  showCal();
+  $('unit').textContent = weighting === 'A' ? 'dB(A)' : 'dB(Z)';
+
+  // Night-vision mode
+  const metas = [...document.querySelectorAll('meta[name="theme-color"]')], metaOrig = metas.map(m => m.content);
+  const redraw = () => { readTokens(); drawDial(); drawTrace(); if (lastDb !== null) $('num').style.color = colorFor(lastDb); };
+  function setNight(on, persist) {
+    document.documentElement.classList.toggle('night', on);
+    $('nightbtn').setAttribute('aria-pressed', on);
+    metas.forEach((m, i) => m.content = on ? '#050404' : metaOrig[i]);
+    if (persist) save('night', on);
+    redraw();
+  }
+  $('nightbtn').onclick = () => setNight(!document.documentElement.classList.contains('night'), true);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redraw);
+
+  $('go').onclick = () => ctx ? stop() : start();
+  $('reset').onclick = reset;
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState === 'visible' && ctx && !wakeLock) { try { wakeLock = await navigator.wakeLock?.request('screen'); } catch {} }
+    if (document.visibilityState === 'hidden') wakeLock = null;
+  });
+  window.addEventListener('resize', () => { drawDial(); drawTrace(); });
+
+  // Install prompt
+  let deferred = null;
+  const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const dismissedRecently = () => { const t = load('installDismissed', 0); return typeof t === 'number' && Date.now() - t < 14 * 864e5; };
+  const showInstall = () => { $('install').hidden = !(deferred && !standalone() && !dismissedRecently()); drawDial(); drawTrace(); };
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; showInstall(); });
+  window.addEventListener('appinstalled', () => { deferred = null; showInstall(); });
+  $('installbtn').onclick = async () => {
+    if (!deferred) return;
+    try { deferred.prompt(); await deferred.userChoice; } catch {}
+    deferred = null; showInstall();
+  };
+  $('installx').onclick = () => { save('installDismissed', Date.now()); $('install').hidden = true; };
+
+  setNight(load('night', false) === true, false);
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {});
+  if (document.fonts?.ready) document.fonts.ready.then(() => { drawDial(); drawTrace(); });
+})();
+</script>
+</body>
+</html>
